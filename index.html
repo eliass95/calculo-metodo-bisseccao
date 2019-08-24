@@ -1,38 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <title>Método da Bissecção</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="./style.css">
 </head>
+
 <body>
     <div id="app">
-        <h1 class="title">Método da Bissecção</h1>
-        <div class="container">
-            <div class="columns is-6">
-                <div class="column">
-                    f(x) =
-                </div>
-                <div class="column">
-                    <input v-model="num1">
-                </div>
-            </div>
+        <h1>Método da Bissecção</h1>
+        <div class="expressao">
+            f(x) =
+            <input v-model="num5" type="number"> x<sup>5</sup> +
+            <input v-model="num4" type="number"> x<sup>4</sup> +
+            <input v-model="num3" type="number"> x<sup>3</sup> +
+            <input v-model="num2" type="number"> x<sup>2</sup> +
+            <input v-model="num1" type="number"> x +
+            <input v-model="num" type="number">
+        </div>
+        <div class="epsilon">
+            E = 10 <sup><input v-model="epsilon" type="number"></sup>
         </div>
     </div>
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script>
         var app6 = new Vue({
             el: '#app',
             data: {
-                num1: '',
-                num2: '',
-                num3: '',
-                num4: '',
                 num5: '',
-                num6: '',
+                num4: '',
+                num3: '',
+                num2: '',
+                num1: '',
+                num: '',
+                epsilon: '',
+            },
+            watch: {
+                num5(data) {
+                    console.log('num5', data);
+                },
+                num4(data) {
+                    console.log('num4', data);
+                },
+                num3(data) {
+                    console.log('num3', data);
+                },
+                num2(data) {
+                    console.log('num2', data);
+                },
+                num1(data) {
+                    console.log('num1', data);
+                },
+                num(data) {
+                    console.log('num', data);
+                },
             }
         });
     </script>

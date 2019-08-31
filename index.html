@@ -7,56 +7,172 @@
     <title>Método da Bissecção</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 </head>
 
 <body>
     <div id="app">
-        <h1>Método da Bissecção</h1>
-        <div class="expressao">
-            f(x) =
-            <input v-model="num5" type="number"> x<sup>5</sup> +
-            <input v-model="num4" type="number"> x<sup>4</sup> +
-            <input v-model="num3" type="number"> x<sup>3</sup> +
-            <input v-model="num2" type="number"> x<sup>2</sup> +
-            <input v-model="num1" type="number"> x +
-            <input v-model="num" type="number">
-        </div>
-        <div class="epsilon">
-            E = 10 <sup><input v-model="epsilon" type="number"></sup>
+
+        <div class="container-fluid">
+
+
+            <div class="row">
+                <h1 class="display-4">Bissecção</h1>
+            </div>
+            <br>
+
+            <div class="card" style="padding: 15px">
+                <div class="row">
+                    <div class="expressao col-md-12">
+                        f(x) =
+                        <input v-model="num5" type="number"> x<sup>5</sup> +
+                        <input v-model="num4" type="number"> x<sup>4</sup> +
+                        <input v-model="num3" type="number"> x<sup>3</sup> +
+                        <input v-model="num2" type="number"> x<sup>2</sup> +
+                        <input v-model="num1" type="number"> x +
+                        <input v-model="num" type="number">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 epsilon">
+                        E = 10 <sup><input v-model="epsilon" type="number"></sup>
+                    </div>
+                    <div class="col-md-6">
+                        <div style="text-align: end">
+                            <button @click="calcular" class="btn btn-primary">Calcular</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-12">
+                    f(x) = {{expression || '-'}}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    e = {{epsilon ? Math.pow(10, Number(epsilon)) : 0}}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    Intervalo = [x0, x1] = [{{x0}}, {{x1}}]
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    Resultado = {{resultado}}
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <table style="width:100%">
+                        <tr>
+                            <th>step</th>
+                            <th>x0</th>
+                            <th>x1</th>
+                            <th>f(x1)</th>
+                        </tr>
+                        <tr v-for="step in steps">
+                            <td>{{step.step}}</td>
+                            <td>{{step.x0}}</td>
+                            <td>{{step.x1}}</td>
+                            <td>{{step.x2}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <br>
+
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script>
-        var app6 = new Vue({
+        const app = new Vue({
             el: '#app',
             data: {
-                num5: '',
-                num4: '',
-                num3: '',
-                num2: '',
-                num1: '',
-                num: '',
-                epsilon: '',
+                num5: 0,
+                num4: 0,
+                num3: 0,
+                num2: 0,
+                num1: 0,
+                num: 0,
+                epsilon: -3,
+                resultado: 0,
+                expression: '',
+                steps: [],
+                x0: -5,
+                x1: 5,
             },
-            watch: {
-                num5(data) {
-                    console.log('num5', data);
+            methods: {
+                gerarFuncao(num5, num4, num3, num2, num1, num) {
+                    const expression = `${num5}*x^5 + ${num4}*x^4 + ${num3}*x^3 + ${num2}*x^2 + ${num1}*x + ${num}`;
+                    return {
+                        f: (x) => {
+                            x = parseFloat(x);
+                            num5 = parseFloat(num5)
+                            num4 = parseFloat(num4)
+                            num3 = parseFloat(num3)
+                            num2 = parseFloat(num2)
+                            num1 = parseFloat(num1)
+                            num = parseFloat(num)
+
+                            let resultado = 0;
+
+                            if (num5) resultado += num5 * Math.pow(x, 5)
+                            if (num4) resultado += num4 * Math.pow(x, 4)
+                            if (num3) resultado += num3 * Math.pow(x, 3)
+                            if (num2) resultado += num2 * Math.pow(x, 2)
+                            if (num1) resultado += num1 * x
+                            if (num) resultado += num
+
+                            return resultado;
+                        },
+                        expression
+                    }
                 },
-                num4(data) {
-                    console.log('num4', data);
-                },
-                num3(data) {
-                    console.log('num3', data);
-                },
-                num2(data) {
-                    console.log('num2', data);
-                },
-                num1(data) {
-                    console.log('num1', data);
-                },
-                num(data) {
-                    console.log('num', data);
-                },
+
+                calcular() {
+                    this.steps = [];
+                    let { f, expression } = this.gerarFuncao(
+                        this.num5, this.num4, this.num3, this.num2, this.num1, this.num
+                    );
+
+                    let x0 = this.x0;
+                    let x1 = this.x1;
+                    let epsilon = Math.pow(10, Number(this.epsilon));
+                    this.expression = expression;
+                    let step = 1;
+
+                    while (x1 - x0 > epsilon) {
+                        let x2 = (x0 + x1) / 2;
+                        this.steps.push({ step, x0, x1, x2 });
+
+                        if (f(x0) * f(x2) > 0) {
+                            x0 = x2;
+                        } else {
+                            x1 = x2;
+                        }
+
+                        step += 1;
+                    }
+
+                    this.resultado = (x0 + x1) / 2;
+                    console.table(JSON.parse(JSON.stringify(this.steps)));
+                }
             }
         });
     </script>
